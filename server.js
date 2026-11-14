@@ -11,7 +11,7 @@ const mk=()=>{const d=[];for(const c of'rygb'){d.push({c,v:'0'});for(let i=1;i<1
 const ok=(g,k)=>k.c==='w'||k.c===g.cur||k.v===g.D[g.D.length-1].v;
 const nc=()=>Math.random().toString(36).slice(2,10);
 function draw(g,p,n){for(let i=0;i<n;i++){if(!g.P.length){const t=g.D.pop();g.P=sh(g.D);g.D=[t];if(!g.P.length)return}g.pl[p].h.push(g.P.pop())}}
-function send(g,only){const now=Date.now(),b={t:'s',code:g.code,ph:g.ph,top:g.D&&g.D[g.D.length-1],dn:g.D?g.D.length:0,cur:g.cur,dir:g.dir,turn:g.turn,drew:g.drew,tl:Math.max(0,(g.dl||now)-now),gl:Math.max(0,(g.end||now)-now),win:g.win,why:g.why,vip:g.pl.findIndex(p=>VIP&&p.id===VIP),ob:(g.sp||[]).length,sp:(g.sp||[]).filter(o=>o.ws&&o.id!==HIDE_ID).map(o=>({n:o.n,pic:o.pic||''})),pl:g.pl.map(q=>({n:q.n,pic:q.pic,c:q.h.length}))};
+function send(g,only){const now=Date.now(),b={t:'s',code:g.code,ph:g.ph,top:g.D&&g.D[g.D.length-1],dn:g.D?g.D.length:0,cur:g.cur,dir:g.dir,turn:g.turn,drew:g.drew,tl:Math.max(0,(g.dl||now)-now),gl:Math.max(0,(g.end||now)-now),win:g.win,why:g.why,vip:g.pl.findIndex(p=>VIP&&p.id===VIP),ob:(g.sp||[]).filter(o=>o.ws&&o.id!==HIDE_ID).length,sp:(g.sp||[]).filter(o=>o.ws&&o.id!==HIDE_ID).map(o=>({n:o.n,pic:o.pic||''})),pl:g.pl.map(q=>({n:q.n,pic:q.pic,c:q.h.length}))};
 g.pl.forEach((p,i)=>{if(p.ws&&p.ws.readyState===1&&(!only||only===p.ws))p.ws.send(JSON.stringify({...b,me:i,h:p.h}))});
 (g.sp||[]).forEach(o=>{if(o.ws&&o.ws.readyState===1&&(!only||only===o.ws))o.ws.send(JSON.stringify({...b,me:0,spec:1,h:g.pl[0]?g.pl[0].h.map(()=>({c:'x',v:'0'})):[]}))})}
 function arm(g,ms){clearTimeout(g.tt);g.dl=Date.now()+ms;g.tt=setTimeout(()=>tick(g),ms)}
@@ -37,7 +37,7 @@ g=R.get(code);if(!g){g={code,pl:[],ph:'wait',dir:1};R.set(code,g)}
 let i=g.pl.findIndex(p=>p.id===id);
 if(i<0){if(g.pl.length>=2){g.sp=g.sp||[];let o=g.sp.find(x=>x.id===id);if(!o){if(g.sp.length>=30){ws.send('{"t":"full"}');g=null;return}o={id};g.sp.push(o)}
 if(o.ws&&o.ws!==ws){try{o.ws.close()}catch{}}o.ws=ws;o.n=String(u.first_name||u.username||'Player').slice(0,24);o.pic=String(u.photo_url||'').slice(0,300);spec=o;send(g);return}
-i=g.pl.push({id,h:[],miss:0})-1}
+i=g.pl.push({id,h:[],miss:0,joined:Date.now()})-1}
 me=i;clearTimeout(g.pl[i].dt);Object.assign(g.pl[i],{ws,n:String(u.first_name||u.username||'Player').slice(0,24),pic:String(u.photo_url||'').slice(0,300),un:String(u.username||'').slice(0,64),lang:String(u.language_code||'').slice(0,8),uid:id});
 if(g.pl.length===2&&g.ph==='wait'){if(Q===code)Q=null;begin(g);logRoundStart(g).catch(e=>console.error(e))}
 send(g);return}
@@ -60,21 +60,26 @@ setInterval(()=>wss.clients.forEach(w=>{if(!w.isAlive)return w.terminate();w.isA
 process.on('uncaughtException',e=>console.error(e));
 if(PUB)setInterval(()=>fetch(PUB+'/health',{cache:'no-store'}).catch(()=>{}),PINGMS);
 async function tg(m,b){const r=await fetch(`${TGAPI}/bot${BOT}/${m}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)});return r.json()}
-async function sendDB(text){if(!DB_CHAT)return;try{await tg('sendMessage',{chat_id:DB_CHAT,text,disable_web_page_preview:true})}catch(e){console.error(e)}}
-function fmtPlayer(p,idx){const name=p&&p.n?p.n:'—';const user=p&&p.un?('@'+p.un):'لا يوجد';const lang=p&&p.lang?p.lang:'غير معروفة';
-return `👤 اللاعب ${idx}:\nالاسم: ${name}\nاليوزر: ${user}\nاللغة: ${lang}\nالدولة/المنطقة: غير متاحة`}
-async function logRoundStart(g){if(!DB_CHAT)return;const now=new Date().toLocaleString('ar-EG',{hour12:true});
+const TZN=process.env.TZ_NAME||'Asia/Aden',NA='غير متاح';
+const fmtT=t=>new Date(t||Date.now()).toLocaleString('ar-EG',{hour12:true,timeZone:TZN});
+async function sendDB(text,photo){if(!DB_CHAT)return;try{text=String(text);if(photo&&text.length<=1000){const r=await tg('sendPhoto',{chat_id:DB_CHAT,photo,caption:text});if(r&&r.ok)return}await tg('sendMessage',{chat_id:DB_CHAT,text:text.slice(0,4000),disable_web_page_preview:true})}catch(e){console.error(e)}}
+async function profPhoto(uid){try{const r=await tg('getUserProfilePhotos',{user_id:uid,limit:1});const p=r.result&&r.result.photos&&r.result.photos[0];return p&&p.length?p[p.length-1].file_id:null}catch{return null}}
+function fmtPlayer(p,idx){const name=p&&p.n?p.n:'—',user=p&&p.un?('@'+p.un):'لا يوجد',lang=p&&p.lang?p.lang:'غير معروفة';
+return `👤 اللاعب ${idx}:\nالاسم: ${name}\nاليوزر: ${user}\nالآيدي: ${(p&&p.uid)||'—'}\nاللغة: ${lang}\nالدولة/المنطقة: ${NA} (تيليجرام لا يعطيها للبوتات)\nوقت الانضمام للطاولة: ${p&&p.joined?fmtT(p.joined):NA}\nتاريخ إنشاء الحساب: ${NA}\nصورة البروفايل: ${p&&p.pic?p.pic:NA}`}
+async function logRoundStart(g){if(!DB_CHAT)return;
 const link=`https://t.me/${BUSER}/${APP}?startapp=${g.code}`;
-const text=`🎮 بدأت جولة جديدة\nكود الغرفة: ${g.code}\n⏰ الوقت: ${now}\n\n${fmtPlayer(g.pl[0],1)}\n\n${fmtPlayer(g.pl[1],2)}\n\n🔗 رابط الدعوة: ${link}`;
-await sendDB(text)}
-async function logRoundEnd(g){if(!DB_CHAT)return;const now=new Date().toLocaleString('ar-EG',{hour12:true});let result;
-if(g.win===-1){result=`🤝 تعادل بين ${g.pl[0]&&g.pl[0].n} و ${g.pl[1]&&g.pl[1].n}`}
+await sendDB(`🎮 بدأت جولة جديدة\nكود الغرفة: ${g.code}\n⏰ وقت البدء: ${fmtT()}\n\n${fmtPlayer(g.pl[0],1)}\n\n${fmtPlayer(g.pl[1],2)}\n\n🔗 رابط الدعوة: ${link}`)}
+async function logRoundEnd(g){if(!DB_CHAT)return;let result;
+if(g.win===-1||g.win===undefined){result=`🤝 تعادل بين ${g.pl[0]&&g.pl[0].n} و ${g.pl[1]&&g.pl[1].n}`}
 else{const w=g.pl[g.win],l=g.pl[1-g.win];result=`🏆 الفائز: ${w?w.n:'—'}\n❌ الخاسر: ${l?l.n:'—'}`}
-const text=`🏁 انتهت الجولة\nكود الغرفة: ${g.code}\n⏰ وقت الانتهاء: ${now}\n${result}`;
-await sendDB(text)}
-async function logIncoming(m){if(!DB_CHAT)return;const from=m.from||{};const name=from.first_name||'—';const user=from.username?('@'+from.username):'لا يوجد';
-const text=`📥 رسالة جديدة\nمن: ${name}\nاليوزر: ${user}\nالمحتوى: ${m.text||'(غير نصية)'}`;
-await sendDB(text)}
+const why={win:'انتهت اللعبة',afk:'انسحاب بسبب عدم اللعب',left:'خروج لاعب',time:'انتهى الوقت'}[g.why]||g.why||'';
+await sendDB(`🏁 انتهت الجولة\nكود الغرفة: ${g.code}\n⏰ وقت الانتهاء: ${fmtT()}\n${result}${why?'\nالسبب: '+why:''}`)}
+async function logUser(from,label,body,chat){from=from||{};const name=[from.first_name,from.last_name].filter(Boolean).join(' ')||'—';
+const text=`${label}\nمن: ${name}\nاليوزر: ${from.username?('@'+from.username):'لا يوجد'}\nالآيدي: ${from.id||'—'}\nاللغة: ${from.language_code||'غير معروفة'}\nالدولة/المنطقة: ${NA}\nتاريخ إنشاء الحساب: ${NA}\nنوع المحادثة: ${chat&&chat.type||'—'}\n⏰ الوقت: ${fmtT()}\nالمحتوى: ${body}`;
+const ph=from.id?await profPhoto(from.id):null;await sendDB(text,ph)}
+async function logIncoming(m){if(!DB_CHAT||String(m.chat&&m.chat.id)===DB_CHAT)return;
+await logUser(m.from,'📥 رسالة جديدة',m.text||m.caption||'(غير نصية)',m.chat)}
+async function logInline(q){if(!DB_CHAT)return;await logUser(q.from,'🔎 استعلام inline','@'+BUSER+' '+(q.query||''),{type:'inline'})}
 let CH=String(process.env.CHANNEL_URL||'').trim();if(CH[0]==='@')CH='https://t.me/'+CH.slice(1);else if(CH&&!/^(https?:|tg:)/i.test(CH))CH='https://'+CH;
 const WKB={inline_keyboard:[[{text:'Against a friend',switch_inline_query_chosen_chat:{query:'',allow_user_chats:true,allow_group_chats:true,allow_channel_chats:false,allow_bot_chats:false}}]].concat(CH?[[{text:'Channel',url:CH}]]:[])};
 async function welcome(chat){try{let r;if(FIDW)r=await tg('sendPhoto',{chat_id:chat,photo:FIDW,caption:WELCOME,reply_markup:WKB});
@@ -92,7 +97,7 @@ if(!a.ok){art.input_message_content={message_text:INVITE};a=await tg('answerInli
 if(!a.ok)console.error('inline',a)}
 async function poll(){let off=0;for(;;){try{const r=await tg('getUpdates',{offset:off,timeout:25,allowed_updates:['inline_query','message']});
 for(const u of r.result||[]){off=u.update_id+1;const q=u.inline_query,m=u.message;
-if(q)await inl(q)
+if(q){logInline(q).catch(e=>console.error(e));await inl(q)}
 else if(m){await logIncoming(m).catch(e=>console.error(e));if(m.text&&m.text.startsWith('/start'))await welcome(m.chat.id)}}}catch(e){await new Promise(r=>setTimeout(r,3000))}}}
 if(BOT)tg('deleteWebhook',{}).then(poll).catch(()=>{});
 srv.listen(process.env.PORT||8080);
