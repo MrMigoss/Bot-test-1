@@ -120,40 +120,6 @@ body.norm #g{animation:shk .7s ease-in-out 2}
 .sadt{left:0;right:0;bottom:7%;text-align:center;font-size:4.6rem;line-height:1.2;color:#b3c0ee;white-space:normal;text-shadow:0 .3rem 1.6rem #000,0 0 3rem #4d5d8c;animation:sdi 2.4s 1.2s ease-out backwards,sway 4s ease-in-out 3.6s infinite,fo 2s 10s forwards}
 @keyframes sdi{from{opacity:0;transform:translateY(-3rem) scale(1.15);filter:blur(1rem)}to{opacity:1;transform:none;filter:none}}
 @keyframes sway{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(.8rem) rotate(1deg)}}
-
-.lw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;box-sizing:border-box;padding-top:var(--pt,17rem);text-align:center}
-.lpp{width:4.4rem;height:4.4rem;flex:none}
-.lw h1{margin:.5rem 0 0;font:900 4.6rem/1.1 Cairo;flex:none}
-.lbox{width:25.4rem;margin-top:1.5rem;padding:.7rem 0;border-radius:2.2rem;background:#05071a;direction:ltr;flex:none;box-sizing:border-box}
-.lr{display:flex;align-items:center;gap:1.2rem;height:4.7rem;padding:0 1.8rem;font-size:2rem;white-space:nowrap;text-align:start}
-.lr .av{position:static;width:3.2rem;height:3.2rem;flex:none}
-.lsp{width:3.2rem;height:3.2rem;border-radius:50%;background:#232433;display:grid;place-items:center;flex:none}
-.lsp svg{width:1.9rem;height:1.9rem;animation:spin 1.5s linear infinite}
-.lr .mu{color:#8b8fa6;direction:rtl}
-.lc{margin-left:auto}
-.sz{margin-top:1.6rem;display:flex;align-items:center;gap:1.1rem;font-size:1.5rem;color:#8b8fa6;flex:none}
-.sb{display:flex;gap:.8rem;direction:ltr}
-.sz button{width:4.2rem;height:3.2rem;border-radius:1.6rem;border:.15rem solid #1b2040;background:#0b0e26;color:#9aa0b8;font:700 1.8rem Fredoka,sans-serif;padding:0}
-.sz button.on{background:#0d6db4;border-color:#1b86d8;color:#fff;box-shadow:0 0 1.4rem #0d6db477}
-.lw .inv{position:relative;left:auto;transform:none;margin-top:1.8rem;flex:none;animation:inb 1.3s ease-in-out infinite,ring 1.3s ease-out infinite}
-.lw .il{margin-top:.9rem;flex:none}
-@keyframes inb{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
-@keyframes ring{0%{box-shadow:0 0 0 0 #2ea20abb}100%{box-shadow:0 0 0 1.5rem #2ea20a00}}
-@media (prefers-reduced-motion:reduce){.lsp svg,.lw .inv{animation:none}}
-#seats{inset:0;pointer-events:none}
-.seat{position:absolute;transform:translateX(-50%);width:8rem;display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.seat .av{position:static;width:3.4rem;height:3.4rem}
-.seat.gone{opacity:.42}
-.mf{display:flex;height:3rem;direction:ltr;justify-content:center}
-.mc{width:2.1rem;height:3rem;border-radius:.45rem;border:.18rem solid #aeb2c6;box-sizing:border-box;flex:none;background:repeating-linear-gradient(45deg,#3d4469 0 .2rem,transparent .2rem .8rem),repeating-linear-gradient(-45deg,#3d4469 0 .2rem,transparent .2rem .8rem),#252a45;box-shadow:0 .2rem .5rem #0009}
-.np.sm{height:2.2rem;max-width:8rem;padding:0 .8rem;font-size:1.15rem;gap:.35rem}
-.np.sm .nm{overflow:hidden;text-overflow:ellipsis;max-width:5rem;flex:0 1 auto}
-.np.sm em{font-size:1.2rem}
-.np.sm s{width:1.2rem;height:1.2rem;border-radius:.3rem}
-.np.sm small{color:#8b8fa6;font-size:1.05rem}
-.er .rk{margin-left:auto;font:700 1.9rem Fredoka,sans-serif;color:#cfd3ea}
-.fxm{position:fixed;left:50%;top:0;width:36rem;height:100%;margin-left:-18rem;pointer-events:none;z-index:61}
-.fxm>*{position:absolute}
 </style>
 </head>
 <body><div id="g"></div>
@@ -181,7 +147,6 @@ const mine=()=>S&&S.ph==='play'&&!S.spec&&S.turn===S.me,ok=k=>k.c==='w'||k.c===S
 const snd=m=>ws&&ws.readyState===1&&ws.send(JSON.stringify(m));
 function drw(){if(mine()&&!S.drew)snd({t:'draw'})}
 function inv(){const c=S&&S.code||room;try{if(T&&T.switchInlineQuery&&(!T.isVersionAtLeast||T.isVersionAtLeast('6.7'))){T.switchInlineQuery(String(c||''),['users','groups']);return}}catch(e){}const u=LINK+'?startapp='+c,l='https://t.me/share/url?url='+encodeURIComponent(u)+'&text='+encodeURIComponent('تعال العب UNO معي!');T&&T.openTelegramLink?T.openTelegramLink(l):window.open(l)}
-function sz(n){snd({t:'size',n})}
 function leave(){try{ws.send('{"t":"leave"}')}catch(e){}try{T.close()}catch(e){location.reload()}}
 const img=p=>p.pic?`<img src="${esc(p.pic)}" alt="">`:'';
 let EYE=0;function eyeL(){EYE=!EYE;eyeR()}
@@ -215,54 +180,33 @@ const B=.95;[[440,0,1.6],[523,1.5,.6],[494,2,1.2],[440,3.2,1],[392,4.2,1.8],[330
 setTimeout(()=>{if(SN===m)m.gain.setTargetAtTime(0,c.currentTime,2)},21000)}catch(e){}}
 const sfx=k=>k==='joy'?clip('joy',cheer):k==='sad'?clip('sad',sadm):0;
 const TXJ=[[50,6,4.2,-6,0],[40,20,3.4,8,.15],[60,26,3.6,-9,.3],[44,40,3.8,5,.45],[58,48,3.4,-5,.6],[50,60,4.4,7,.75],[42,74,3.6,-8,.9],[58,82,3.6,9,1.05],[50,92,4,-4,1.2]].map(([x,y,s,r,d])=>`<div class="bt" style="left:${x}%;top:${y}%;font-size:${s}rem;--r:${r}deg;--d:${d}s"><span>عمتك ليل فازت</span></div>`).join(''),TXS='<div class="sadt" style="font-size:3.3rem">#لا_نامت_أعين_الجبناء</div>';
-let MID=0;
-function midChk(o,s){if(!o||o.ph!=='play'||s.ph!=='play'||s.pl.length<3||s.vip<0)return;if((o.rk||[]).length||!(s.rk||[]).length||s.rk[0]!==s.vip)return;
-fx('joy');const id=MID,e=document.createElement('div');e.className='fxm';e.innerHTML='<div class="rays"></div><div class="stk2 win"></div>';document.body.appendChild(e);
-setTimeout(()=>{if(MID!==id)return;const a=CUR;if(a){const t=setInterval(()=>{a.volume=Math.max(0,a.volume-.12);if(a.volume<=0){clearInterval(t);try{a.pause()}catch(x){}if(CUR===a)CUR=null}},60)}},7600);
-setTimeout(()=>{if(MID!==id)return;fx('')},8600)}
-function fx(k){MID++;stopS();document.querySelectorAll('.fxc,.fxm').forEach(e=>e.remove());document.body.classList.remove('joy','sad','norm');if(!k)return;document.body.classList.add(k);sfx(k);
+function fx(k){stopS();document.querySelectorAll('.fxc').forEach(e=>e.remove());document.body.classList.remove('joy','sad','norm');if(!k)return;document.body.classList.add(k);sfx(k);
 const c=document.createElement('div'),C=['#ffb800','#f23a47','#1e78ff','#66c800','#fff'];c.className='fxc';let s='';
 for(let i=0;i<(k==='joy'?90:70);i++)s+=k!=='sad'?`<i class="cf" style="left:${Math.random()*100}%;--x:${(Math.random()-.5)*30}vw;--r:${Math.random()*900}deg;background:${C[i%5]};animation-delay:${Math.random()*2.2}s;animation-duration:${2.4+Math.random()*2}s;width:${.8+Math.random()*.8}rem;height:${1.2+Math.random()*1.2}rem"></i>`:`<i class="rn" style="left:${Math.random()*100}%;animation-delay:${Math.random()*1.5}s;animation-duration:${.7+Math.random()*.6}s"></i>`;
 c.innerHTML=s+(k==='joy'?TXJ:k==='sad'?TXS:'');document.body.appendChild(c);try{T.HapticFeedback.notificationOccurred(k==='sad'?'error':'success')}catch(e){}}
 function lobby(){fx();document.body.classList.add('flat');
-const N=S?S.max:2,ps=S?S.pl:[],rows=1+Math.max(1,ps.length),host=!!S&&S.me===0&&ps.length===1,pt=Math.max(7,17-3.5*Math.max(0,rows-2));
-const me=j=>`<div class="lr"><div class="av">${img(ME)}</div><span>أنت</span></div>`;
-$('#g').innerHTML=`<button class="pl" id="lv">مغادرة</button><div class="lob">${DECO}<div class="lw" style="--pt:${pt}rem"><svg class="lpp" viewBox="0 0 24 24" fill="#fff">${PPL}</svg><h1>الغرفة</h1><div class="lbox"><div class="lr"><span class="lsp">${IC.R}</span><span class="mu">${S?'في انتظار اللاعبين...':'جاري الاتصال...'}</span><span class="lc">${S?ps.length+' / '+N:''}</span></div>${S?ps.map((p,j)=>j===S.me?me(j):`<div class="lr"><div class="av">${img(p)}</div><span>${esc(p.n)}</span></div>`).join(''):me(0)}</div>${host?`<div class="sz"><span>عدد اللاعبين</span><div class="sb">${[2,3,4].map(n=>`<button class="${n===N?'on':''}" onclick="sz(${n})">${n}</button>`).join('')}</div></div>`:''}<button class="inv" onclick="inv()">${IV}</button><div class="il">دعوة<br>أصحابك</div></div></div>`;$('#lv').onclick=leave}
+$('#g').innerHTML=`<button class="pl" id="lv">مغادرة</button><div class="lob"><svg class="pp" viewBox="0 0 24 24" fill="#fff">${PPL}</svg><h1 style="top:22.8rem">الغرفة</h1><div class="room"><div class="rw" style="top:.7rem"><span class="sp">${IC.R}</span><span class="mu">${S?'في انتظار لاعب...':'جاري الاتصال...'}</span><span style="margin-left:auto">${S?S.pl.length:0} / 2</span></div><div class="rw" style="top:5.4rem"><div class="av">${img(ME)}</div><span>أنت</span></div></div>${DECO}<button class="inv" style="top:41.4rem" onclick="inv()">${IV}</button><div class="il" style="top:45.2rem">دعوة<br>أصحابك</div></div>`;$('#lv').onclick=leave}
 function build(){fx();document.body.classList.remove('flat');
-$('#g').innerHTML=`<button class="pl" id="lv">مغادرة</button><div class="pl" id="clk">5:00</div><div class="pl eyb" id="eye" onclick="eyeL()" style="right:6.8rem;display:none"></div>${S&&S.spec?'<div class="pl" style="left:50%;transform:translateX(-50%)">👁 مشاهدة</div>':''}<div id="fan"></div><div class="av" id="oav"></div><div class="np" id="onp"></div><div id="mid"><div id="cen">${ARR}<div id="disc"></div><div id="pile"><div id="halo"></div><div class="cd back stk" onclick="drw()"></div></div><div id="pill"></div><button id="ps" onclick="snd({t:'pass'})">تخطَّ</button></div></div><div id="hand"></div><div class="av" id="mav"></div><div class="np" id="mnp"></div><div id="seats"></div><div id="pk"></div>`;$('#lv').onclick=leave}
-function anim(){document.querySelectorAll('[data-f]').forEach(e=>{const src=$('#'+e.dataset.f);if(!src){e.removeAttribute('data-f');return}const f=src.getBoundingClientRect(),r=e.getBoundingClientRect(),s=e.style;s.setProperty('--dx',f.left+f.width/2-r.left-r.width/2+'px');s.setProperty('--dy',f.top+f.height/2-r.top-r.height/2+'px');s.setProperty('--r',(Math.random()*30-15)+'deg');s.setProperty('--d',(e.dataset.d||0)+'s');e.removeAttribute('data-f');e.classList.add('fl')})}
-const MED=['🥇','🥈','🥉','4'];
-function seats(){const N=S.pl.length,me=S.me,ord=[];for(let k=1;k<N;k++)ord.push((me+k)%N);
-const P=N===3?[[9,5.4],[27,5.4]]:[[4.2,26.5],[18,5.4],[31.8,26.5]];
-$('#seats').innerHTML=ord.map((j,k)=>{const p=S.pl[j],[x,y]=P[k],on=S.ph==='play'&&S.turn===j&&!p.o,r=(S.rk||[]).indexOf(j),c=Math.min(p.c,9);
-const tag=p.o===1?`<em>${MED[r]||r+1}</em>`:p.o===2?'<small>غادر</small>':`<em>${p.c}</em>`;
-const mf=p.o?'':`<div class="mf">${Array.from({length:c},(_,i)=>`<i class="mc" style="${i?`margin-left:-${(2.1-Math.min(1,4.8/Math.max(1,c-1))).toFixed(2)}rem`:''}"></i>`).join('')}</div>`;
-return `<div class="seat${p.o===2?' gone':''}" id="s${j}" style="left:${x}rem;top:${y}rem"><div class="av${on?' on':''}">${img(p)}</div>${mf}<div class="np sm${on?' on':''}"><span class="nm">${esc(p.n)}</span>${tag}</div></div>`}).join('')}
+$('#g').innerHTML=`<button class="pl" id="lv">مغادرة</button><div class="pl" id="clk">5:00</div><div class="pl eyb" id="eye" onclick="eyeL()" style="right:6.8rem;display:none"></div>${S&&S.spec?'<div class="pl" style="left:50%;transform:translateX(-50%)">👁 مشاهدة</div>':''}<div id="fan"></div><div class="av" id="oav"></div><div class="np" id="onp"></div><div id="mid"><div id="cen">${ARR}<div id="disc"></div><div id="pile"><div id="halo"></div><div class="cd back stk" onclick="drw()"></div></div><div id="pill"></div><button id="ps" onclick="snd({t:'pass'})">تخطَّ</button></div></div><div id="hand"></div><div class="av" id="mav"></div><div class="np" id="mnp"></div><div id="pk"></div>`;$('#lv').onclick=leave}
+function anim(){document.querySelectorAll('[data-f]').forEach(e=>{const f=$('#'+e.dataset.f).getBoundingClientRect(),r=e.getBoundingClientRect(),s=e.style;s.setProperty('--dx',f.left+f.width/2-r.left-r.width/2+'px');s.setProperty('--dy',f.top+f.height/2-r.top-r.height/2+'px');s.setProperty('--r',(Math.random()*30-15)+'deg');s.setProperty('--d',(e.dataset.d||0)+'s');e.removeAttribute('data-f');e.classList.add('fl')})}
 function render(o){
-const pl=!!o,N=S.pl.length,m=S.h.length,n0=pl?o.h.length:0,st=Math.min(4.8,24.8/Math.max(1,m-1)),tm=S.turn===S.me,to=!tm,mp=S.pl[S.me],mo=!S.spec&&!!mp&&mp.o===1;
+const pl=!!o,m=S.h.length,n0=pl?o.h.length:0,op=S.pl[1-S.me],c0=pl?o.pl[1-o.me].c:0,st=Math.min(4.8,24.8/Math.max(1,m-1)),sp=Math.min(3.8,24.8/Math.max(1,op.c-1)),tm=S.turn===S.me,to=!tm;
 $('#hand').innerHTML=S.h.map((k,i)=>{const f=!pl?i*.09:i>=n0?(i-n0)*.1:-1;return cd(k,S.spec?'back':can(i)?'':'no',`data-i="${i}" ${f>=0?`data-f="pile" data-d="${f}"`:''} style="${i?`margin-left:-${(9.2-st).toFixed(2)}rem`:''}" onclick="hp(${i},this)"`)}).join('');
-if(N===2){const op=S.pl[1-S.me],c0=pl?o.pl[1-o.me].c:0,sp=Math.min(3.8,24.8/Math.max(1,op.c-1));
-['#fan','#oav','#onp'].forEach(q=>$(q).style.display='');$('#seats').innerHTML='';
 $('#fan').innerHTML=Array.from({length:op.c},(_,i)=>{const f=!pl?i*.09+.045:i>=c0?(i-c0)*.1:-1;return `<div class="cd back" ${f>=0?`data-f="pile" data-d="${f}"`:''} style="${i?`margin-left:-${(9.2-sp).toFixed(2)}rem`:''}"></div>`}).join('');
+$('#disc').innerHTML=cd({c:S.cur,v:S.top.v},'',!pl?'data-f="pile" data-d="1"':S.dn!==o.dn&&o.turn!==o.me?'data-f="fan"':'');
 $('#oav').className='av'+(to?' on':'');$('#oav').innerHTML=img(op);
-$('#onp').className='np'+(to?' on':'');$('#onp').innerHTML=`${esc(op.n)}<em>${op.c}</em><s></s>`}
-else{['#fan','#oav','#onp'].forEach(q=>$(q).style.display='none');seats()}
-$('#disc').innerHTML=cd({c:S.cur,v:S.top.v},'',!pl?'data-f="pile" data-d="1"':S.dn!==o.dn&&o.turn!==o.me?`data-f="${N===2?'fan':'s'+o.turn}"`:'');
+$('#onp').className='np'+(to?' on':'');$('#onp').innerHTML=`${esc(op.n)}<em>${op.c}</em><s></s>`;
 $('#mav').className='av'+(tm?' on':'');$('#mav').innerHTML=img(S.spec?S.pl[0]:ME);
-$('#mnp').className='np'+(tm?' on':'');$('#mnp').innerHTML=`${S.spec?esc(S.pl[0].n):'أنت'}<em>${mo?(MED[(S.rk||[]).indexOf(S.me)]||''):m}</em>${mo?'':'<s></s>'}`;
+$('#mnp').className='np'+(tm?' on':'');$('#mnp').innerHTML=`${S.spec?esc(S.pl[0].n):'أنت'}<em>${m}</em><s></s>`;
 $('#halo').style.opacity=!S.spec&&tm&&!S.drew?1:0;$('#arr').classList.toggle('rv',S.dir<0);$('#ps').style.display=!S.spec&&tm&&S.drew?'flex':'none';
 {const e=$('#eye');if(e){e.style.display=S.ob?'flex':'none';e.textContent='👁 '+S.ob}}eyeR();
 anim()}
 function endS(){if(!S||S.ph!=='end')return;document.body.classList.add('flat');document.body.classList.remove('dng');
-const N=S.pl.length,w=S.win,L=S.why==='afk'||S.why==='left',ord=N>2?(S.rank&&S.rank.length===N?S.rank:S.pl.map((_,i)=>i)):(w>=0?[w,1-w]:[S.me,1-S.me]),first=N>2?ord[0]:w;
-let fk='';if(!L){if(S.vip>=0){if(N===2){if(w>=0)fk=w===S.vip?'joy':'sad'}else if(first===S.vip)fk='joy';else if(ord[N-1]===S.vip)fk='sad'}
-if(!fk&&(S.vip<0||N>2)&&first>=0&&(S.spec||first===S.me))fk='norm'}
-const fxm=fk==='joy'?'<div class="rays"></div><div class="stk2 win"></div>':fk==='sad'?'<div class="stk2 lose"></div>':'';fx(fk);
-const T0=31.5,GP=4.7,row=(j,i)=>{const p=S.pl[j],wn=i===0&&first>=0,fg=N>2?p.o===2:(L&&w>=0&&i===1);return `<div class="er ${wn?'w':''}" style="top:${T0+i*GP}rem"><div class="av">${img(p)}${wn?`<u><svg viewBox="0 0 24 24">${CRW}</svg></u>`:''}</div><span>${esc(p.n)}</span>${fg?'<small>غادر</small>':''}${N>2?`<b class="rk">${MED[i]||i+1}</b>`:''}</div>`};
-const ev=T0+N*GP-.7,iv=N>2?ev+1.6:41.6,il=N>2?iv+3.8:45.4;
-$('#g').innerHTML=`<button class="pl" id="lv">مغادرة</button><div class="end">${fxm}<svg class="cr" viewBox="0 0 24 24">${CRW}</svg><h1 style="top:24.4rem">انتهت اللعبة</h1>${ord.map((j,i)=>row(j,i)).join('')}<button class="inv" style="top:${iv}rem" onclick="inv()">${IV}</button><div class="il" style="top:${il}rem">دعوة<br>أصحابك</div></div>`;$('#lv').onclick=leave}
+const w=S.win,L=S.why==='afk'||S.why==='left',ord=w>=0?[w,1-w]:[S.me,1-S.me];let fk='';if(!L){if(S.vip>=0){if(w>=0)fk=w===S.vip?'joy':'sad'}else if(w>=0&&(S.spec||w===S.me))fk='norm'}const fxm=fk==='joy'?'<div class="rays"></div><div class="stk2 win"></div>':fk==='sad'?'<div class="stk2 lose"></div>':'';fx(fk);
+const row=(j,i)=>{const p=S.pl[j],wn=w>=0&&i===0;return `<div class="er ${wn?'w':''}" style="top:${i?36.2:31.5}rem"><div class="av">${img(p)}${wn?`<u><svg viewBox="0 0 24 24">${CRW}</svg></u>`:''}</div><span>${esc(p.n)}</span>${L&&w>=0&&i===1?'<small>غادر</small>':''}</div>`};
+$('#g').innerHTML=`<button class="pl" id="lv">مغادرة</button><div class="end">${fxm}<svg class="cr" viewBox="0 0 24 24">${CRW}</svg><h1 style="top:24.4rem">انتهت اللعبة</h1>${row(ord[0],0)}${row(ord[1],1)}<button class="inv" style="top:41.6rem" onclick="inv()">${IV}</button><div class="il" style="top:45.4rem">دعوة<br>أصحابك</div></div>`;$('#lv').onclick=leave}
 function on(s){if(s.t==='full'){dead=1;stat('الغرفة ممتلئة، اطلب رابط دعوة جديداً');return}if(s.t==='auth'){dead=1;stat('افتح اللعبة من داخل تيليجرام');return}stat('');
-const o=S;S=s;S.at=Date.now();if(gh){gh.remove();gh=null}if(s.code)room=s.code;midChk(o,s);
+const o=S;S=s;S.at=Date.now();if(gh){gh.remove();gh=null}if(s.code&&!room)room=s.code;
 if(s.ph==='wait')return lobby();
 if(s.ph==='end'){if(!o||o.ph!=='end')setTimeout(endS,o&&o.ph==='play'?800:0);return}
 if(!o||o.ph!=='play')build();render(o&&o.ph==='play'?o:null)}
@@ -289,10 +233,10 @@ $('#disc').classList.toggle('hot',go(dg))});
 function dEnd(e,cx){if(!dg||e.pointerId!==dg.id)return;const d=dg;dg=null;if(!d.on)return;sup=true;setTimeout(()=>sup=false,60);$('#disc').classList.remove('hot');const p=d.p,L=LP;
 if(!cx&&can(d.i)&&go(d))commit(d.i,p,L.x,L.y,L.s,L.a);else back(p,L.x,L.y,L.s,L.a,d.el)}
 addEventListener('pointerup',e=>dEnd(e,false));addEventListener('pointercancel',e=>dEnd(e,true));
-setInterval(()=>{if(!S||S.ph!=='play')return;const dt=Date.now()-S.at,g=Math.max(0,S.gl-dt),r=Math.ceil(Math.max(0,S.tl-dt)/1000),m=!S.spec&&S.turn===S.me,mo=!S.spec&&S.pl[S.me]&&S.pl[S.me].o===1,p=$('#pill');if(!p)return;
+setInterval(()=>{if(!S||S.ph!=='play')return;const dt=Date.now()-S.at,g=Math.max(0,S.gl-dt),r=Math.ceil(Math.max(0,S.tl-dt)/1000),m=!S.spec&&S.turn===S.me,p=$('#pill');if(!p)return;
 $('#clk').textContent=Math.floor(g/60000)+':'+String(Math.floor(g/1000)%60).padStart(2,'0');
-p.className=m?(r<=5?'am':'bl'):'';p.textContent=mo?'خلّصت أوراقك · المركز '+(S.rk.indexOf(S.me)+1):m?'دورك دلوقتي'+(r<=5?' · '+r:''):'الدور على '+S.pl[S.turn].n+(r<=5?' · '+r:'');
-document.body.classList.toggle('dng',!S.spec&&!mo&&!m&&r<=5)},250);
+p.className=m?(r<=5?'am':'bl'):'';p.textContent=m?'دورك دلوقتي'+(r<=5?' · '+r:''):'الدور على '+S.pl[S.spec?S.turn:1-S.me].n+(r<=5?' · '+r:'');
+document.body.classList.toggle('dng',!S.spec&&!m&&r<=5)},250);
 lobby();
 let tries=0,dead=0;
 function stat(t){let e=$('.dcn');if(!t){e&&e.remove();return}if(!e){e=document.createElement('div');e.className='dcn';document.body.appendChild(e)}e.textContent=t}
